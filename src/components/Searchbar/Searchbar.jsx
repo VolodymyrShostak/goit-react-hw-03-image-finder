@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { WrapperSearchbar, SearchForm, SearchFormInput,SearchFormButton,SearchFormButtonLabel } from './styled.js';
-git
+
 
 export class Searchbar extends React.Component {
   state = {
@@ -19,8 +19,8 @@ onChange = e => {
 
   onSubmit = e => {
     e.preventDefault();
-    const searchQuerry = this.state.search;
-    this.props.onSubmit(searchQuerry);
+    const keyWord = this.state.search;
+    this.props.onSubmit(keyWord);
     this.reset();
   };
 
