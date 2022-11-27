@@ -1,14 +1,10 @@
-
 import React from 'react';
-import { GeterPictures } from './api';
-// import { Box } from './Box';
-// import { Button } from './Button/Button';
+import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-// import Loader from './Loader/Loader';
-// import { Modal } from './Modal/Modal';
-import { Searchbar }  from './Searchbar/Searchbar';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { GeterPictures } from './api.jsx';
+import { Searchbar } from './Searchbar/Searchbar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export class App extends React.Component {
   state = {
@@ -21,93 +17,45 @@ export class App extends React.Component {
     total: null,
   };
 
-  // componentDidUpdate(_, prevState) {
-  //   const { searchQ, page } = this.state;
-
-  //   if (prevState.page !== page || prevState.searchQ !== searchQ) {
-  //     return this.loadSearchingImg();
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    const { keyWord, page } = this.state;
+    if (prevState.page !== page || prevState.keyWord !== keyWord) {
+      return this.loadSearchingImg();
+    }
+  }
 
   onSearchImage = keyWord => {
-    return (
-      // if (!searchQuerry || searchQuerry === this.state.searchQ) return;
-      this.setState({ keyWord: keyWord, page: 1, pictures: [] })
-    );
+    return this.setState({ keyWord: keyWord, page: 1, pictures: [] });
   };
 
   loadSearchingImg = async () => {
-    try {
-      this.setState({ loader: true, hideBtn: true });
-      const { keyWord, page } = this.state;
-      const data = await GeterPictures(keyWord, page);
+    this.setState({ loader: true, hideBtn: true });
+    const { keyWord, page } = this.state;
+    const data = await GeterPictures(keyWord, page);
+    this.setState(prevState => ({
+      pictures: [...prevState.pictures, ...data.hits],
+      loader: false,
+      total: data.totalHits,
+    }));
+   
+  };
 
-      // if (!data.hits.length) {
-      //   this.setState({ loader: false });
-      //   return toast('Sorry, we not found images...');
-      // }
+  onClickLoadMore = () => {
+    this.setState({ page: this.state.page + 1 });
+  };
 
-      this.setState(prevState => ({
-        pictures: [...prevState.pictures, ...data.hits],
-        loader: false,
-        total: data.totalHits,
-      }));
-
-        if (this.state.page === Math.ceil(this.state.total / 12)) {
-          // toast('Sorry, this is the end of list...');
-          this.setState({ hideBtn: false });
-        }
-          return;
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      // onClickLoadMore = () => {
-      //   this.setState({ page: this.state.page + 1 });
-      // };
-
-      // onModalOpen = url => {
-      //   this.setState({ modalImg: url });
-      // };
-
-      // onModalClose = () => {
-      //   this.setState({
-      //     modalImg: '',
-      //   });
-      // };
-
-      render=()=>{
-        return (
-          <>
-            <Searchbar onSubmit={this.onSearchImage} />
-            <>
-              <ImageGallery
-                pictures={this.state.pictures}
-              // onClick={this.onModalOpen}
-              />
-              {/* {this.state.pictures.length > 0 && this.state.hideBtn && (
+  render = () => {
+    return (
+      <>
+        <Searchbar onSubmit={this.onSearchImage} />
+        <ToastContainer autoClose={3000} />
+        <>
+          <ImageGallery pictures={this.state.pictures} />
+         
             <Button onClick={this.onClickLoadMore} />
-          )} */}
-            </>
-            {/* {this.state.modalImg && (
-          <Modal closeModal={this.onModalClose} url={this.state.modalImg} />
-        )}
-        {this.state.loader && <Loader />}
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        /> */}
-          </>
-        );
-      }
-    }
-
+          
+        </>
+      </>
+    );
+  };
+}
