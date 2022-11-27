@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { WrapperSearchbar, SearchForm, SearchFormInput,SearchFormButton,SearchFormButtonLabel } from './styled.js';
 import { toast } from 'react-toastify';
+import { WrapperSearchbar, SearchForm, SearchFormInput,SearchFormButton,SearchFormButtonLabel } from './styled.js';
 
 export class Searchbar extends React.Component {
   state = {
@@ -13,19 +13,16 @@ onChange = e => {
     this.setState({ [name]: value.trim() });
   };
 
-  reset = () => {
-    this.setState({ search: '' });
-  };
-
+  
   onSubmit = e => {
     e.preventDefault();
     if (this.state.search.trim() === '') {
-      toast.warning('Please, enter a search...');
+      toast.warning('Please, enter a keyword...');
       return;
     }
     const keyWord = this.state.search;
     this.props.onSubmit(keyWord);
-    this.reset();
+   this.setState({ search: '' });
   };
 
   render() {
