@@ -6,7 +6,7 @@ export const Button = ({ onClick }) => {
   return (
     <WpapperLoadMoreBtn>
       <LoadMoreBtn
-               onClick={() => onClick()}
+               onClick={onClick}
       >Load more</LoadMoreBtn>
     </WpapperLoadMoreBtn>
   );

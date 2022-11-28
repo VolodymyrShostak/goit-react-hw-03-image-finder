@@ -12,7 +12,7 @@ export const Loader = ()=>{
   ariaLabel="audio-loading"
   wrapperStyle={{}}
   wrapperClass="wrapper-class"
-  visible={true}
+ 
 
 />)
 }

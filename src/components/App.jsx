@@ -9,7 +9,6 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 
-
 export class App extends React.Component {
   state = {
     pictures: [],
@@ -21,14 +20,16 @@ export class App extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { keyWord } = this.state;
-    if (prevState.keyWord !== keyWord) {
+    const { keyWord, page } = this.state;
+    if (prevState.keyWord !== keyWord || prevState.page !== page) {
       return this.loadSearchingImg();
     }
   }
 
   onSearchImage = keyWord => {
-    return this.setState({ pictures: [], keyWord: keyWord, page: 1 });
+    if (!keyWord || keyWord === this.state.keyWord) return;
+
+    this.setState({ pictures: [], keyWord: keyWord, page: 1 });
   };
 
   loadSearchingImg = async () => {
@@ -70,7 +71,10 @@ export class App extends React.Component {
             pictures={this.state.pictures}
             onClick={this.onModalOpen}
           />
-          <Button onClick={this.onClickLoadMore} />
+          {this.state.pictures.length > 0 && this.state.hideButton && (
+            //
+            <Button onClick={this.onClickLoadMore} />
+          )}
 
           {this.state.modal && (
             <Modal closeModal={this.onModalClose} url={this.state.modal} />
