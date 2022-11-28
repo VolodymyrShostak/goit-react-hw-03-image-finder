@@ -3,41 +3,44 @@ import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { GeterPictures } from './api.jsx';
 import { Searchbar } from './Searchbar/Searchbar';
-// import { Audio } from 'react-loader-spinner';
+import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export class App extends React.Component {
   state = {
     pictures: [],
     keyWord: '',
-    modalImg: '',
-    total: 0,
+    modal: '',
     page: 1,
     loader: false,
-    hideBtn: true,
+    hideButton: true,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { keyWord, page } = this.state;
-    if (prevState.page !== page || prevState.keyWord !== keyWord) {
+    const { keyWord } = this.state;
+    if (prevState.keyWord !== keyWord) {
       return this.loadSearchingImg();
     }
   }
 
   onSearchImage = keyWord => {
-    return this.setState({ keyWord: keyWord, page: 1, pictures: [] });
+    return this.setState({ pictures: [], keyWord: keyWord, page: 1 });
   };
 
   loadSearchingImg = async () => {
-    this.setState({ loader: true, hideBtn: true });
+    this.setState({ loader: true, hideButton: true });
     const { keyWord, page } = this.state;
     const data = await GeterPictures(keyWord, page);
+    if (!data.hits.length) {
+      this.setState({ loader: false });
+      return toast('Sorry, we did not find any pictures...');
+    }
+
     this.setState(prevState => ({
       pictures: [...prevState.pictures, ...data.hits],
       loader: false,
-      total: data.totalHits,
     }));
   };
 
@@ -45,12 +48,12 @@ export class App extends React.Component {
     this.setState({ page: this.state.page + 1 });
   };
   onModalOpen = url => {
-    this.setState({ modalImg: url });
+    this.setState({ modal: url });
   };
 
   onModalClose = () => {
     this.setState({
-      modalImg: '',
+      modal: '',
     });
   };
 
@@ -60,14 +63,15 @@ export class App extends React.Component {
         <Searchbar onSubmit={this.onSearchImage} />
         <ToastContainer autoClose={3000} />
         <>
+          {this.state.loader && <Loader />}
           <ImageGallery
             pictures={this.state.pictures}
             onClick={this.onModalOpen}
           />
           <Button onClick={this.onClickLoadMore} />
-          
-          {this.state.modalImg && (
-            <Modal closeModal={this.onModalClose} url={this.state.modalImg} />
+
+          {this.state.modal && (
+            <Modal closeModal={this.onModalClose} url={this.state.modal} />
           )}
         </>
       </>
