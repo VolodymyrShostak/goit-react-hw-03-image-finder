@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { WpapperLoadMoreBtn, LoadMoreBtn } from './styled.js';
 
 export const Button = ({ onClick }) => {
@@ -9,4 +10,9 @@ export const Button = ({ onClick }) => {
       >Load more</LoadMoreBtn>
     </WpapperLoadMoreBtn>
   );
+};
+
+
+Button.propTypes = {
+  onClick: PropTypes.func
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {ImageGalleryItemImage, ImageGalleryItem} from './styled.js';
 
 export const ImageItem =( {webformatURL = '',
@@ -15,5 +16,11 @@ export const ImageItem =( {webformatURL = '',
     )
 };
  
+ImageGalleryItem.propTypes = {
+    webformatURL: PropTypes.string,
+    largeImageURL: PropTypes.string,
+    tags: PropTypes.string,
+    onClick: PropTypes.func
 
+}
       
