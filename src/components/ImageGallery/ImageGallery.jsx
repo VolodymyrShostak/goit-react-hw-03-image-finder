@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ImageItem } from '../ImageGalleryItem/ImageGalleryItem';
 import { Wrapper } from './styled';
-// import { GeterPictures } from './api.jsx';
+
 
 export const ImageGallery = ({ pictures, onClick = () => { } }) => {
    

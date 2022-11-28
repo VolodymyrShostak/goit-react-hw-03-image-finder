@@ -72,7 +72,7 @@ export class App extends React.Component {
             onClick={this.onModalOpen}
           />
           {this.state.pictures.length > 0 && this.state.hideButton && (
-            //
+            
             <Button onClick={this.onClickLoadMore} />
           )}
 
